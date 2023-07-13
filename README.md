@@ -8,7 +8,7 @@ such as resizing, cropping, filtering, and more.
 ## Installation
 To install common_image_tools, simply run the following command:
 ```bash
-pip install common_image_tools
+pip install common-image-tools
 ```
 
 ## Usage
