@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from PIL import Image
 
 
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
@@ -48,7 +49,7 @@ def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) ->
     return final_img
 
 
-def merge_texture(image, mask, texture):
+def merge_texture(image, mask, texture, alpha=0.3):
     """Merge the texture with the image using the mask using hsv color space."""
 
     # if texture is smaller than image, resize it
@@ -68,7 +69,9 @@ def merge_texture(image, mask, texture):
     # new_h = cv2.add(hp, h)
     # new_s = cv2.add(sp, s)
     # new_v = cv2.add(vp, vp)
-    new_v = cv2.addWeighted(v, 0.6, vp, 0.4, 0)  # TODO aggiungere filtro hard mesh? (non serve per demo)
+
+    beta = (1.0 - alpha)
+    new_v = cv2.addWeighted(v, alpha, vp, beta, 0)  # TODO aggiungere filtro hard mesh? (non serve per demo)
 
     new_hsv_image = cv2.merge([hp, sp, new_v])
     # new_hsv_image = cv2.merge([new_h, new_s, v])
@@ -80,3 +83,33 @@ def merge_texture(image, mask, texture):
     final_img = cv2.bitwise_xor(colored_image, original_image)
 
     return final_img
+
+
+def create_pil_image(size: tuple, color: tuple) -> Image:
+    """Create a PIL image with the specified color and size.
+
+    Args:
+        size (tuple): Size of the image
+        color (tuple): Color of the image in RGB format
+
+    Returns:
+        PIL.Image: Image in PIL format (RGB)
+    """
+    from PIL import Image
+
+    return Image.new("RGB", size, color)
+
+
+def create_cv2_image(size: tuple, color: tuple) -> np.ndarray:
+    """Create a cv2 image with the specified color and size.
+
+    Args:
+        size (tuple): Size of the image
+        color (tuple): Color of the image in BGR format
+
+    Returns:
+        np.ndarray: Image in opencv format (BGR)
+    """
+    img = np.zeros((size[0], size[1], 3), np.uint8)
+    img[:] = color
+    return img
