@@ -10,10 +10,14 @@ packages = [{include = "common_image_tools"}]
 python = "^3.9"
 pillow = "^9.5.0"
 opencv-python-headless = "^4.8.0.74"
+color-transfer = "^0.1"
+scikit-image = "^0.21.0"
 
 
 [tool.poetry.group.dev.dependencies]
 opencv-python = "^4.8.0.74"
+jupyter = "^1.0.0"
+matplotlib = "^3.7.2"
 
 [build-system]
 requires = ["poetry-core"]
