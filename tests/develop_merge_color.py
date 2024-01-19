@@ -16,10 +16,10 @@ def main():
     cv2.rectangle(mask, (100, 700), (1000, 1500), (255, 255, 255), -1)
     # cv2.rectangle(mask, (100, 700), (1000, 1500), (255, 255, 255), -1)
 
-    colored_overlay = tool.create_cv2_image((img.shape[1], img.shape[0]), (255, 0, 100))
+    colored_overlay = tool.create_cv2_image((img.shape[1], img.shape[0]), (255, 0, 0))
 
-    # img = tool.merge_color(img, mask, (125, 110, 100))
-    img = tool.merge_texture(img, mask, colored_overlay, alpha=0.5)
+    img = tool.merge_color(img, mask, (255, 0, 0))
+    # img = tool.merge_texture(img, mask, colored_overlay, alpha=0.5)
 
     cv2.imshow("img", img)
     cv2.waitKey(0)

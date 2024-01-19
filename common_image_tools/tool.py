@@ -6,19 +6,6 @@ from PIL import Image
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
     """Merge the target color with the image using the mask using hsv color space.ù
 
-    Example:
-        >>> import cv2
-        >>> import numpy as np
-        >>> from common_image_tools import tool
-        >>> img = cv2.imread("imgs/test.jpg")
-        >>> # Create one channel mask with the same size of the image
-        >>> mask = np.zeros((img.shape[0], img.shape[1]), dtype=np.uint8)
-        >>> # Draw a rectangle on the mask
-        >>> cv2.rectangle(mask, (100, 100), (500, 500), (255, 255, 255), -1)
-        >>> img = tool.merge_color(img, mask, (0, 255, 0))
-        >>> cv2.imshow("img", img)
-        >>> cv2.waitKey(0)
-
     Args:
         image (np.ndarray): Image in opencv format (BGR)
         mask (np.ndarray): Mask in opencv format one channel
@@ -71,7 +58,7 @@ def merge_texture(image, mask, texture, alpha=0.3):
     # new_v = cv2.add(vp, vp)
 
     beta = (1.0 - alpha)
-    new_v = cv2.addWeighted(v, alpha, vp, beta, 0)  # TODO aggiungere filtro hard mesh? (non serve per demo)
+    new_v = cv2.addWeighted(v, alpha, vp, beta, 0)
 
     new_hsv_image = cv2.merge([hp, sp, new_v])
     # new_hsv_image = cv2.merge([new_h, new_s, v])
@@ -113,3 +100,4 @@ def create_cv2_image(size: tuple, color: tuple) -> np.ndarray:
     img = np.zeros((size[0], size[1], 3), np.uint8)
     img[:] = color
     return img
+

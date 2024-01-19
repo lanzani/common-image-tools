@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "common-image-tools"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Federico Lanzani <federico@federicolanzani.com>"]
 readme = "README.md"
@@ -12,6 +12,7 @@ pillow = "^9.5.0"
 opencv-python-headless = "^4.8.0.74"
 color-transfer = "^0.1"
 scikit-image = "^0.21.0"
+dlib = "^19.24.2"
 
 
 [tool.poetry.group.dev.dependencies]
