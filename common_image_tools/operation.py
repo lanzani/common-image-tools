@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 from math import ceil
 
-def resize_image_with_aspect_ratio(image:np.ndarray, size: tuple[int, int]) -> np.ndarray:
+
+def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     """
     Resize an image while maintaining its aspect ratio using OpenCV.
 
@@ -27,7 +28,8 @@ def resize_image_with_aspect_ratio(image:np.ndarray, size: tuple[int, int]) -> n
     # Save the resized image
     return resized_image
 
-def is_point_in_bbox(point:tuple[int, int], bbox: tuple[int, int, int, int]) -> bool:
+
+def is_point_in_bbox(point: tuple[int, int], bbox: tuple[int, int, int, int]) -> bool:
     x1, y1, w, h = bbox
     x2, y2 = x1 + w, y1 + h
     x, y = point
@@ -37,7 +39,6 @@ def is_point_in_bbox(point:tuple[int, int], bbox: tuple[int, int, int, int]) -> 
 
 
 def is_point_in_shape(point, shape_contour) -> bool:
-
     ctn = np.array(shape_contour)
     ctn = ctn.reshape((-1, 1, 2))
 
@@ -62,6 +63,7 @@ def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
             (ceil(x * scale_factor), ceil(y * scale_factor), ceil(w * scale_factor), ceil(h * scale_factor)))
 
     return f_bboxes
+
 
 def bbox_centroid(bbox):
     x, y, w, h = bbox
