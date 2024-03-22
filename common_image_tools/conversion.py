@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import dlib
 
+
 # === PILLOW - OPENCV ==================================================================================================
 def pil_to_cv2(pil_image: Image) -> np.ndarray:
     """
@@ -44,10 +45,12 @@ def cv2_to_pil(cv2_image: np.ndarray) -> Image:
     # Convert cv2 image to PIL image
     return Image.fromarray(cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB))
 
+
 # === DLIB =============================================================================================================
 
 def rect_to_tuple(rect):
     return rect.left(), rect.top(), rect.right() - rect.left(), rect.bottom() - rect.top()
+
 
 def tuple_to_rect(bbox):
     return dlib.rectangle(int(bbox[0]), int(bbox[1]),

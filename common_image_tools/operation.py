@@ -8,7 +8,7 @@ def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> 
     Resize an image while maintaining its aspect ratio using OpenCV.
 
     """
-    width, height = size
+    height, width = size
 
     # Calculate the aspect ratio
     aspect_ratio = width / float(height)

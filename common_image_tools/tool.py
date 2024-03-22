@@ -3,6 +3,65 @@ import numpy as np
 from PIL import Image
 
 
+def opencv_built_with_gstreamer() -> bool:
+    """Check if OpenCV has been built with GStreamer support.
+
+    Returns:
+        bool: True if OpenCV has been built with GStreamer support, False otherwise.
+    """
+    # Get build information
+    build_info = cv2.getBuildInformation()
+    # Get the row with GStreamer information
+    gstreamer_info = [x for x in build_info.split("\n") if "GStreamer" in x]
+    # Check if "YES" is in the row
+    return "YES" in gstreamer_info[0]
+
+
+def movement_detection(image1: np.ndarray, image2: np.ndarray, area_threshold: int = 400, blur_size: int = 5,
+                       threshold_sensitivity: int = 25) -> bool:
+    """Detect if a difference is present between two images.
+
+    Args:
+        image1 (np.ndarray): Image in opencv format (BGR)
+        image2 (np.ndarray): Image in opencv format (BGR)
+        area_threshold (int, optional): Area threshold. Defaults to 400.
+        blur_size (int, optional): Blur size. Defaults to 5.
+        threshold_sensitivity (int, optional): Threshold of a pixel to be considered different. Defaults to 25.
+
+    Returns:
+        bool: True if there is movement, False otherwise
+    """
+
+    delta_frame = cv2.absdiff(image1, image2)
+
+    gray = cv2.cvtColor(delta_frame, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (blur_size, blur_size), 0)
+    _, th = cv2.threshold(blur, threshold_sensitivity, 255, cv2.THRESH_BINARY)
+    dilated = cv2.dilate(th, np.ones((3, 3), np.uint8), iterations=3)
+
+    c, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    difference = np.sum([cv2.contourArea(contour) for contour in c])
+
+    # === DEBUG ===
+    # try:
+    #     cv2.imshow("Frame1", img1)
+    #     cv2.imshow("Frame2", img2)
+    #     cv2.imshow("Blur", blur)
+    #     if difference > threshold:
+    #         font = cv2.FONT_HERSHEY_SIMPLEX
+    #         cv2.putText(dilated, 'Movimento Rilevato', (10, 50), font, 1, (255, 0, 0), 2, cv2.LINE_AA)
+    #     else:
+    #         pass
+    #     cv2.imshow("Differenza", dilated)
+    #     cv2.imshow("C", c)
+    # except:
+    #     pass
+    # === END DEBUG===
+
+    return difference > area_threshold
+
+
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
     """Merge the target color with the image using the mask using hsv color space.ù
 
@@ -100,4 +159,3 @@ def create_cv2_image(size: tuple, color: tuple) -> np.ndarray:
     img = np.zeros((size[0], size[1], 3), np.uint8)
     img[:] = color
     return img
-
