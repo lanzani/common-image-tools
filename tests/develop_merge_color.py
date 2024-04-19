@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import cv2
 import numpy as np
 
 from common_image_tools import tool
+
 
 def main():
     img = cv2.imread("imgs/test_car.jpg")

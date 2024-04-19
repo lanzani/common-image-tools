@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import cv2
+import dlib
 import numpy as np
 from PIL import Image
-import dlib
 
 
 # === PILLOW - OPENCV ==================================================================================================

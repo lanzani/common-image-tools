@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import cv2
 from PIL import Image
+
 from common_image_tools import conversion
 
 

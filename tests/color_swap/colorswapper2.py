@@ -1,6 +1,8 @@
-from PIL import Image
-import numpy as np
+# -*- coding: utf-8 -*-
 import colorsys
+
+import numpy as np
+from PIL import Image
 
 rgb_to_hsv = np.vectorize(colorsys.rgb_to_hsv)
 hsv_to_rgb = np.vectorize(colorsys.hsv_to_rgb)

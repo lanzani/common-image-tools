@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+from math import ceil
+
 import cv2
 import numpy as np
-from math import ceil
 
 
 def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:

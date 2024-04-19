@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # create and save a 4k black image
 import cv2
 import numpy as np
