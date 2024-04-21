@@ -67,7 +67,16 @@ def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
     return f_bboxes
 
 
-def bbox_centroid(bbox):
+def bbox_centroid(bbox: tuple[int, int, int, int]) -> tuple[int, int]:
+    """
+    Calculate the centroid coordinates of a bounding box.
+
+    Parameters:
+        bbox (tuple): A tuple representing the bounding box in the format (x, y, width, height).
+
+    Returns:
+        tuple: A tuple containing the coordinates of the centroid as integers (center_x, center_y).
+    """
     x, y, w, h = bbox
     center_x = x + (w / 2)
     center_y = y + (h / 2)
