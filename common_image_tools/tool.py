@@ -147,15 +147,21 @@ def create_pil_image(size: tuple, color: tuple) -> Image:
     return Image.new("RGB", size, color)
 
 
-def create_cv2_image(size: tuple, color: tuple) -> np.ndarray:
-    """Create a cv2 image with the specified color and size.
+def create_cv2_image(size: tuple[int, int], color: tuple[int, int, int]) -> np.ndarray:
+    """
+    Creates a NumPy array representing an image using OpenCV conventions.
 
-    Args:
-        size (tuple): Size of the image
-        color (tuple): Color of the image in BGR format
+    Parameters:
+        size (tuple[int, int]): A tuple specifying the dimensions of the image in the format (height, width).
+        color (tuple[int, int, int]): A tuple representing the color of the image in BGR (Blue, Green, Red) format.
 
     Returns:
-        np.ndarray: Image in opencv format (BGR)
+        np.ndarray: An image represented as a NumPy array with dimensions (height, width, 3).
+                    Each pixel in the image will have the specified color.
+
+    Example:
+        >>> create_cv2_image((100, 200), (0, 255, 0))
+        Returns a 100x200 green image.
     """
     img = np.zeros((size[0], size[1], 3), np.uint8)
     img[:] = color

@@ -6,10 +6,6 @@ import numpy as np
 
 
 def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
-    """
-    Resize an image while maintaining its aspect ratio using OpenCV.
-
-    """
     height, width = size
 
     # Calculate the aspect ratio
@@ -52,12 +48,6 @@ def is_point_in_shape(point, shape_contour) -> bool:
 
 
 def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
-    """Ridimensiona i rettangoli per il fattore passato come parametro
-
-    :param bboxes: Lista di rettangoli da ridimensionare
-    :param scale_factor: Valore moltiplicativo
-    :return: Lista di rettangoli ridimensionati
-    """
     f_bboxes = []
     for box in bboxes:
         x, y, w, h = box
