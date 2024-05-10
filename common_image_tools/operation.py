@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from math import ceil
+from typing import Tuple, List
 
 import cv2
 import numpy as np
 
 
-def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
+def resize_image_with_aspect_ratio(image: np.ndarray, size: Tuple[int, int]) -> np.ndarray:
     height, width = size
 
     # Calculate the aspect ratio
@@ -27,7 +28,7 @@ def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> 
     return resized_image
 
 
-def is_point_in_bbox(point: tuple[int, int], bbox: tuple[int, int, int, int]) -> bool:
+def is_point_in_bbox(point: Tuple[int, int], bbox: Tuple[int, int, int, int]) -> bool:
     x1, y1, w, h = bbox
     x2, y2 = x1 + w, y1 + h
     x, y = point
@@ -47,7 +48,7 @@ def is_point_in_shape(point, shape_contour) -> bool:
     return result >= 0
 
 
-def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
+def scale_bboxes(bboxes: List[Tuple], scale_factor: float) -> List[Tuple]:
     f_bboxes = []
     for box in bboxes:
         x, y, w, h = box
@@ -57,7 +58,7 @@ def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
     return f_bboxes
 
 
-def bbox_centroid(bbox: tuple[int, int, int, int]) -> tuple[int, int]:
+def bbox_centroid(bbox: Tuple[int, int, int, int]) -> Tuple[int, int]:
     """
     Calculate the centroid coordinates of a bounding box.
 

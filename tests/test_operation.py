@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import pytest
 
 from common_image_tools.operation import bbox_centroid
@@ -19,9 +21,9 @@ class TestBboxCentroid:
         (0, 0, 15, 15),
         (1000, 2000, 300, 400),
     ])
-    def test_valid_bboxes(self, bbox: tuple[int, int, int, int]):
+    def test_valid_bboxes(self, bbox: Tuple[int, int, int, int]):
         centroid = bbox_centroid(bbox)
-        assert isinstance(centroid, tuple)
+        assert isinstance(centroid, Tuple)
         assert len(centroid) == 2
         assert all(isinstance(coord, int) for coord in centroid)
 

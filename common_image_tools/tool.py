@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import cv2
 import numpy as np
 from PIL import Image
@@ -132,7 +134,7 @@ def merge_texture(image, mask, texture, alpha=0.3):
     return final_img
 
 
-def create_pil_image(size: tuple, color: tuple) -> Image:
+def create_pil_image(size: Tuple[int, int], color: Tuple[int, int, int]) -> Image:
     """Create a PIL image with the specified color and size.
 
     Args:
@@ -147,7 +149,7 @@ def create_pil_image(size: tuple, color: tuple) -> Image:
     return Image.new("RGB", size, color)
 
 
-def create_cv2_image(size: tuple[int, int], color: tuple[int, int, int]) -> np.ndarray:
+def create_cv2_image(size: Tuple[int, int], color: Tuple[int, int, int]) -> np.ndarray:
     """
     Creates a NumPy array representing an image using OpenCV conventions.
 
