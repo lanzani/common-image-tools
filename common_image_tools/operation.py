@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 from math import ceil
 from typing import Tuple, List
 
@@ -6,7 +7,7 @@ import cv2
 import numpy as np
 
 
-def resize_image_with_aspect_ratio(image: np.ndarray, size: Tuple[int, int]) -> np.ndarray:
+def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     height, width = size
 
     # Calculate the aspect ratio

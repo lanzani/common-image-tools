@@ -4,7 +4,7 @@ version = "0.1.8"
 description = ""
 authors = ["Federico Lanzani <federico@federicolanzani.com>"]
 readme = "README.md"
-packages = [{include = "common_image_tools"}]
+packages = [{ include = "common_image_tools" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -12,7 +12,6 @@ pillow = ">=9.5.0"
 opencv-python = "~4.8.0.76"
 color-transfer = "^0.1"
 scikit-image = "^0.21.0"
-dlib = "19.24.2"
 
 
 [tool.poetry.group.dev.dependencies]

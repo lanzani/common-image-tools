@@ -48,10 +48,10 @@ def movement_detection(image1: np.ndarray, image2: np.ndarray, area_threshold: i
 
     # === DEBUG ===
     # try:
-    #     cv2.imshow("Frame1", img1)
-    #     cv2.imshow("Frame2", img2)
+    #     cv2.imshow("Frame1", image1)
+    #     cv2.imshow("Frame2", image2)
     #     cv2.imshow("Blur", blur)
-    #     if difference > threshold:
+    #     if difference > area_threshold:
     #         font = cv2.FONT_HERSHEY_SIMPLEX
     #         cv2.putText(dilated, 'Movimento Rilevato', (10, 50), font, 1, (255, 0, 0), 2, cv2.LINE_AA)
     #     else:
