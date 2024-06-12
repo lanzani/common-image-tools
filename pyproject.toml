@@ -9,7 +9,7 @@ packages = [{ include = "common_image_tools" }]
 [tool.poetry.dependencies]
 python = "^3.8"
 pillow = ">=9.5.0"
-opencv-python = "~4.8.0.76"
+opencv-python = "^4.8.0.0"
 color-transfer = "^0.1"
 scikit-image = "^0.21.0"
 

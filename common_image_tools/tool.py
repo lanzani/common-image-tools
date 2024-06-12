@@ -65,6 +65,9 @@ def movement_detection(image1: np.ndarray, image2: np.ndarray, area_threshold: i
     return difference > area_threshold
 
 
+
+
+
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
     """Merge the target color with the image using the mask using hsv color space.ù
 
