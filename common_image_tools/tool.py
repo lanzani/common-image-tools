@@ -21,8 +21,13 @@ def opencv_built_with_gstreamer() -> bool:
     return "YES" in gstreamer_info[0]
 
 
-def movement_detection(image1: np.ndarray, image2: np.ndarray, area_threshold: int = 400, blur_size: int = 5,
-                       threshold_sensitivity: int = 25) -> bool:
+def movement_detection(
+    image1: np.ndarray,
+    image2: np.ndarray,
+    area_threshold: int = 400,
+    blur_size: int = 5,
+    threshold_sensitivity: int = 25,
+) -> bool:
     """Detect if a difference is present between two images.
 
     Args:
@@ -66,9 +71,6 @@ def movement_detection(image1: np.ndarray, image2: np.ndarray, area_threshold: i
     return difference > area_threshold
 
 
-
-
-
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
     """Merge the target color with the image using the mask using hsv color space.ù
 
@@ -85,7 +87,7 @@ def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) ->
 
     h, s, v = cv2.split(hsv_image)
 
-    color_to_merge = np.uint8([[target_color_rgb[:: -1]]])
+    color_to_merge = np.uint8([[target_color_rgb[::-1]]])
     hsv_color = cv2.cvtColor(color_to_merge, cv2.COLOR_BGR2HSV)
 
     h.fill(hsv_color[0][0][0])
@@ -123,7 +125,7 @@ def merge_texture(image, mask, texture, alpha=0.3):
     # new_s = cv2.add(sp, s)
     # new_v = cv2.add(vp, vp)
 
-    beta = (1.0 - alpha)
+    beta = 1.0 - alpha
     new_v = cv2.addWeighted(v, alpha, vp, beta, 0)
 
     new_hsv_image = cv2.merge([hp, sp, new_v])

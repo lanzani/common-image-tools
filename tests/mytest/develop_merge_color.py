@@ -10,7 +10,6 @@ def main():
     black = cv2.imread("imgs/black.jpg")
     # white = cv2.imread("imgs/white.jpg")
 
-
     # Create one channel mask with the same size of the image
     mask = np.zeros((img.shape[0], img.shape[1]), dtype=np.uint8)
 
@@ -25,8 +24,6 @@ def main():
 
     cv2.imshow("img", img)
     cv2.waitKey(0)
-
-
 
 
 if __name__ == "__main__":

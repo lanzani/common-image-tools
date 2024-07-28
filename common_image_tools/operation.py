@@ -63,7 +63,8 @@ def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
     for box in bboxes:
         x, y, w, h = box
         f_bboxes.append(
-            (ceil(x * scale_factor), ceil(y * scale_factor), ceil(w * scale_factor), ceil(h * scale_factor)))
+            (ceil(x * scale_factor), ceil(y * scale_factor), ceil(w * scale_factor), ceil(h * scale_factor))
+        )
 
     return f_bboxes
 

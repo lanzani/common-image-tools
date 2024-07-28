@@ -52,6 +52,7 @@ def cv2_to_pil(cv2_image: np.ndarray) -> Image:
 
 # === DLIB =============================================================================================================
 
+
 def rect_to_tuple(rect: dlib.rectangle) -> Tuple[int, int, int, int]:
     """Convert a dlib rectangle object to a tuple representing a bounding box.
 
@@ -79,9 +80,7 @@ def tuple_to_rect(bbox: Tuple) -> dlib.rectangle:
     Returns:
         dlib.rectangle: A rectangle object representing the bounding box.
     """
-    return dlib.rectangle(int(bbox[0]), int(bbox[1]),
-                          int(bbox[2] + bbox[0]),
-                          int(bbox[3] + bbox[1]))
+    return dlib.rectangle(int(bbox[0]), int(bbox[1]), int(bbox[2] + bbox[0]), int(bbox[3] + bbox[1]))
 
 
 # ======================================================================================================================

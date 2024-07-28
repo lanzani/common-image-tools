@@ -18,17 +18,17 @@ def main():
 
         previous_frame = frame.copy()
         if movement_bbox is not None:
-            frame = cv2.putText(frame, 'Movement detected', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,
-                                cv2.LINE_AA)
+            frame = cv2.putText(
+                frame, "Movement detected", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA
+            )
             for bbox in movement_bbox:
                 x, y, w, h = bbox
                 frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        cv2.imshow('frame', frame)
+        cv2.imshow("frame", frame)
 
-        if cv2.waitKey(3) & 0xFF == ord('q'):
+        if cv2.waitKey(3) & 0xFF == ord("q"):
             break
-
 
 
 if __name__ == "__main__":

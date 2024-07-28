@@ -18,13 +18,13 @@ def changeColor(imgPath):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV_FULL)
 
-    cascade = cv.CascadeClassifier(r'haarcascades\haarcascade_frontalface_default.xml')
+    cascade = cv.CascadeClassifier(r"haarcascades\haarcascade_frontalface_default.xml")
     face = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
 
     trim_x = 0  # 切り取ったx
 
-    for (x, y, w, h) in face:
-        img_trim = img[max(0, y - h * 2):int(y + h * 4 / 3), max(0, x - w * 2):x + w * 2]
+    for x, y, w, h in face:
+        img_trim = img[max(0, y - h * 2) : int(y + h * 4 / 3), max(0, x - w * 2) : x + w * 2]
         if max(0, x - w * 2) == 0:
             trim_x = 0
         else:
@@ -62,14 +62,17 @@ def changeColor(imgPath):
 
     for x in range(cnt_width):
         for y in range(cnt_height):
-            dist_img[y, x] = cv.pointPolygonTest(cnt, (x + cnt_x_min, y + cnt_y_min),
-                                                 True)  # 始点を[cnt_x_min,cnt_y_min]にあわせる
+            dist_img[y, x] = cv.pointPolygonTest(
+                cnt, (x + cnt_x_min, y + cnt_y_min), True
+            )  # 始点を[cnt_x_min,cnt_y_min]にあわせる
             if dist_img[y, x] > 0:  # 領域なの点だったら
                 # cv.circle(img_test,tuple([x + cnt_x_min,y + cnt_y_min]),1,[0,0,255],-1) #指定した座標に円を描く
                 # img_test[y + cnt_y_min,x + cnt_x_min,0] += 40
-                if (img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 0] <= 150 and
-                        img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 1] <= 150 and
-                        img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 2] <= 150):
+                if (
+                    img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 0] <= 150
+                    and img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 1] <= 150
+                    and img_test[cnt_y_min + y, cnt_x_min + trim_x + x, 2] <= 150
+                ):
                     addBGR(img_test, cnt_x_min + trim_x, cnt_y_min, x, y, 85, 0, 0)  # b,g,r値を追加！
 
     # print(cnt_x_max,cnt_x_min,cnt_y_max,cnt_y_min)
@@ -84,6 +87,7 @@ def changeColor(imgPath):
     # cv.destroyAllWindows()
 
     return img_test
+
 
 # cv.imshow("Converted",changeColor(r'images\blackman.jpg'))
 
