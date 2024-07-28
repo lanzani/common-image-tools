@@ -7,6 +7,16 @@ import numpy as np
 
 
 def resize_image_with_aspect_ratio(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
+    """
+    Resize an image while maintaining its aspect ratio using OpenCV.
+
+    Parameters:
+        image (np.ndarray): The input image as a NumPy array.
+        size (tuple): A tuple (width, height) specifying the new size.
+
+    Returns:
+        np.ndarray: The resized image as a NumPy array.
+    """
     height, width = size
 
     # Calculate the aspect ratio
