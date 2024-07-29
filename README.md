@@ -34,3 +34,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 # TODO
 
 - [ ] Change names to modules, collections of functions should be plural
+
+_Stats_
+
+[![HitCount](https://hits.dwyl.com/lanzani/common-image-tools.svg?style=flat-square)](http://hits.dwyl.com/lanzani/common-image-tools)
