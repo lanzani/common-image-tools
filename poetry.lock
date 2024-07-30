@@ -399,6 +399,20 @@ files = [
 ]
 
 [[package]]
+name = "click"
+version = "8.1.7"
+description = "Composable command line interface toolkit"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
+    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
 name = "color-transfer"
 version = "0.1"
 description = "Implements color transfer between two images using the Lab color space, similar to the Reinhard et al. paper,"
@@ -778,6 +792,30 @@ files = [
     {file = "fqdn-1.5.1-py3-none-any.whl", hash = "sha256:3a179af3761e4df6eb2e026ff9e1a3033d3587bf980a0b1b2e1e5d08d7358014"},
     {file = "fqdn-1.5.1.tar.gz", hash = "sha256:105ed3677e767fb5ca086a0c1f4bb66ebc3c100be518f0e0d755d9eae164d89f"},
 ]
+
+[[package]]
+name = "genbadge"
+version = "1.1.1"
+description = "Generate badges for tools that do not provide one."
+optional = false
+python-versions = "*"
+files = [
+    {file = "genbadge-1.1.1-py2.py3-none-any.whl", hash = "sha256:c8b67ccdad2867434cdc0be7c4bd3f6af6003c466d8ff5013b8b5842ca8730de"},
+    {file = "genbadge-1.1.1.tar.gz", hash = "sha256:12cdaaacbc9e0ea3164bf580cfb87ec61ff17ae0728f09a7f0102f8ab3112f4c"},
+]
+
+[package.dependencies]
+click = ">7.0"
+defusedxml = {version = "*", optional = true, markers = "extra == \"coverage\""}
+pillow = "*"
+requests = "*"
+setuptools = "*"
+
+[package.extras]
+all = ["defusedxml", "flake8-html"]
+coverage = ["defusedxml"]
+flake8 = ["flake8-html"]
+tests = ["defusedxml"]
 
 [[package]]
 name = "h11"
@@ -2152,13 +2190,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "3.7.1"
+version = "3.8.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pre_commit-3.7.1-py2.py3-none-any.whl", hash = "sha256:fae36fd1d7ad7d6a5a1c0b0d5adb2ed1a3bda5a21bf6c3e5372073d7a11cd4c5"},
-    {file = "pre_commit-3.7.1.tar.gz", hash = "sha256:8ca3ad567bc78a4972a3f1a477e94a79d4597e8140a6e0b651c5e33899c3654a"},
+    {file = "pre_commit-3.8.0-py2.py3-none-any.whl", hash = "sha256:9a90a53bf82fdd8778d58085faf8d83df56e40dfe18f45b19446e26bf1b3a63f"},
+    {file = "pre_commit-3.8.0.tar.gz", hash = "sha256:8bb6494d4a20423842e198980c9ecf9f96607a07ea29549e180eef9ae80fe7af"},
 ]
 
 [package.dependencies]
@@ -2948,13 +2986,13 @@ win32 = ["pywin32"]
 
 [[package]]
 name = "setuptools"
-version = "71.1.0"
+version = "72.1.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-71.1.0-py3-none-any.whl", hash = "sha256:33874fdc59b3188304b2e7c80d9029097ea31627180896fb549c578ceb8a0855"},
-    {file = "setuptools-71.1.0.tar.gz", hash = "sha256:032d42ee9fb536e33087fb66cac5f840eb9391ed05637b3f2a76a7c8fb477936"},
+    {file = "setuptools-72.1.0-py3-none-any.whl", hash = "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1"},
+    {file = "setuptools-72.1.0.tar.gz", hash = "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"},
 ]
 
 [package.extras]
@@ -3274,4 +3312,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3709d50228eed5b8a225ab74d119708b3e2f6a30518763db154cc5dd7e58a34d"
+content-hash = "450a661a5f4a833974aaa65583b4af362bebb5820e830fb97f3bf8b5203a1c2a"

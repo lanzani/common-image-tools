@@ -1,5 +1,9 @@
 # Common Image Tools
 
+[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
+[![Coverage Status](/reports/coverage/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)
+
+
 ## Description
 
 common_image_tools is a repository containing a curated collection of commonly used image manipulation functions for

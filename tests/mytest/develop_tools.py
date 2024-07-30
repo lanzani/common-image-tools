@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import cv2
 
 from common_image_tools.tool import movement_detection_bbox
