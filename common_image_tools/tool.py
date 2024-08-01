@@ -72,7 +72,7 @@ def movement_detection(
 
 
 def merge_color(image: np.ndarray, mask: np.ndarray, target_color_rgb: tuple) -> np.ndarray:
-    """Merge the target color with the image using the mask using hsv color space.ù
+    """Merge the target color with the image using the mask using hsv color space.
 
     Args:
         image (np.ndarray): Image in opencv format (BGR)
