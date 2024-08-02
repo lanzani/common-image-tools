@@ -13,7 +13,7 @@ opencv-python = "^4.8.0.0"
 color-transfer = "^0.1"
 scikit-image = "^0.21.0"
 loguru = "^0.7.0"
-#dlib = { version = "19.24.2", optional = true }
+dlib = { version = "19.24.2", optional = true }
 
 
 [tool.poetry.group.dev.dependencies]
@@ -27,8 +27,8 @@ mypy = "^1.9.0"
 pre-commit = "^3.8.0"
 ruff = "^0.4.0"
 
-#[tool.poetry.extras]
-#dlib = ["dlib"]
+[tool.poetry.extras]
+dlib = ["dlib"]
 
 [tool.ruff]
 line-length = 120

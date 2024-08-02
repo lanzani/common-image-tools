@@ -660,6 +660,16 @@ files = [
 ]
 
 [[package]]
+name = "dlib"
+version = "19.24.2"
+description = "A toolkit for making real world machine learning and data analysis applications"
+optional = true
+python-versions = "*"
+files = [
+    {file = "dlib-19.24.2.tar.gz", hash = "sha256:2d4f618073bc6b297aa01ce05595a2d32b5b37e69cafd99f796e77346f6dcfb5"},
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -3309,7 +3319,10 @@ files = [
 [package.extras]
 dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
+[extras]
+dlib = ["dlib"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "450a661a5f4a833974aaa65583b4af362bebb5820e830fb97f3bf8b5203a1c2a"
+content-hash = "50d113634d0a4a1cc6a576dba0b2ce2487680531d11ffe4a5d45d212a1270402"

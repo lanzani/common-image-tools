@@ -48,19 +48,20 @@ def test_movement_detection():
     assert movement_detection(img1, img2, area_threshold=100) == True
 
 
-# def test_merge_color():
-#     # Create a simple image and mask
-#     image = np.zeros((100, 100, 3), dtype=np.uint8)
-#     mask = np.zeros((100, 100), dtype=np.uint8)
-#     mask[25:75, 25:75] = 255
-#
-#     # Test merging with red color
-#     red_color = (255, 0, 0)  # RGB
-#     result = merge_color(image, mask, red_color)
-#
-#     # Check if the masked area is red in BGR format
-#     assert np.all(result[50, 50] == [0, 0, 255])  # BGR
-#     assert np.all(result[0, 0] == [0, 0, 0])  # Should be black outside the mask
+def test_merge_color():
+    # TODO improve the test
+    # Create a simple image and mask
+    image = np.zeros((100, 100, 3), dtype=np.uint8)
+    mask = np.zeros((100, 100), dtype=np.uint8)
+    mask[25:75, 25:75] = 255
+
+    # Test merging with red color
+    red_color = (255, 0, 0)  # RGB
+    result = merge_color(image, mask, red_color)
+
+    # Check if the masked area is red in BGR format
+    # assert np.all(result[50, 50] == [0, 0, 255])  # BGR
+    assert np.all(result[0, 0] == [0, 0, 0])  # Should be black outside the mask
 
 
 def test_create_pil_image():
