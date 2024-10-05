@@ -1,10 +1,32 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import os
 from enum import Enum
 
 from common_image_tools.tool import opencv_built_with_gstreamer
 from loguru import logger
+
+
+def is_jetson_device() -> bool:
+    """
+    Check if the current device is a Jetson by looking for the device-tree model file
+    and checking its content for "Jetson" string.
+
+    Returns:
+        bool: True if running on a Jetson device, False otherwise
+    """
+    model_path = "/proc/device-tree/model"
+
+    try:
+        if os.path.exists(model_path):
+            with open(model_path, "r") as f:
+                model_info = f.read().lower()
+                return "jetson" in model_info
+    except Exception as e:
+        logger.debug(f"Error checking for Jetson device: {e}")
+
+    return False
 
 
 class OpencvBackendMode(Enum):
@@ -18,6 +40,9 @@ class OpencvBackendMode(Enum):
 
     # Only for Jetson devices, the gstreamer pipeline uses a plugin for hardware acceleration
     OPENCV_GSTREAMER_JETSON = 2
+
+    # Use the gstreamer backend
+    OPENCV_GSTREAMER = 3
 
 
 class VideoSource:
@@ -48,74 +73,120 @@ class VideoSource:
 
         if opencv_backend == OpencvBackendMode.AUTO:
             if opencv_built_with_gstreamer():
-                self.opencv_backend = OpencvBackendMode.OPENCV_GSTREAMER_JETSON
+                # If we're on a Jetson device, use the Jetson-specific backend
+                if is_jetson_device():
+                    self.opencv_backend = OpencvBackendMode.OPENCV_GSTREAMER_JETSON
+                    logger.debug("Detected Jetson device, using OPENCV_GSTREAMER_JETSON backend")
+                else:
+                    self.opencv_backend = OpencvBackendMode.OPENCV_GSTREAMER
+                    logger.debug("Using standard OPENCV_GSTREAMER backend")
             else:
                 self.opencv_backend = OpencvBackendMode.OPENCV_DEFAULT
+                logger.debug("GStreamer not available, using OPENCV_DEFAULT backend")
         else:
             self.opencv_backend = opencv_backend
 
+            # Validate backend selection on non-Jetson devices
+        if self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON and not is_jetson_device():
+            logger.warning(
+                "OPENCV_GSTREAMER_JETSON backend selected but not running on a Jetson device. "
+                "Falling back to standard OPENCV_GSTREAMER"
+            )
+            self.opencv_backend = OpencvBackendMode.OPENCV_GSTREAMER
+
         logger.debug(f"Using {self.opencv_backend} OpenCV backend")
+
+    def _create_gstreamer_pipeline(self, use_jetson: bool = False) -> str:
+        """
+        Create a GStreamer pipeline string based on the source type and device capabilities.
+
+        Args:
+            use_jetson: Whether to use Jetson-specific GStreamer elements
+
+        Returns:
+            str: The complete GStreamer pipeline string
+        """
+        if "rtsp" in str(self.unparsed_source):
+            if use_jetson:
+                pipeline = f"uridecodebin uri={self.unparsed_source} ! nvvidconv ! "
+            else:
+                pipeline = f"uridecodebin uri={self.unparsed_source} ! " "decodebin ! videoconvert ! videoscale ! "
+
+        elif ".mp4" in str(self.unparsed_source):
+            if use_jetson:
+                pipeline = f"filesrc location={self.unparsed_source} ! decodebin ! nvvidconv ! "
+            else:
+                pipeline = f"filesrc location={self.unparsed_source} ! " "decodebin ! videoconvert ! videoscale ! "
+
+        elif "/dev/video" in str(self.unparsed_source):
+            if not all(self.target_shape):
+                raise ValueError("The target shape must be set for the webcam video source")
+            if not self.target_fps:
+                raise ValueError("The target fps must be set for the webcam video source")
+
+            if use_jetson:
+                return (
+                    f"v4l2src device={self.unparsed_source} ! "
+                    f"image/jpeg,format=MJPG,width={self.target_shape[1]},height={self.target_shape[0]},"
+                    f"framerate={self.target_fps}/1 ! nvv4l2decoder mjpeg=1 ! nvvidconv ! "
+                    f"video/x-raw,format=BGRx ! appsink drop=1"
+                )
+            else:
+                return (
+                    f"v4l2src device={self.unparsed_source} ! "
+                    f"image/jpeg,format=MJPG,width={self.target_shape[1]},height={self.target_shape[0]},"
+                    f"framerate={self.target_fps}/1 ! jpegdec ! videoconvert ! "
+                    f"video/x-raw,format=BGR ! appsink drop=1"
+                )
+
+        elif str(self.unparsed_source).isdigit():
+            logger.warning("The webcam video source is experimental")
+            raise NotImplementedError(f"Integer video source {self.unparsed_source} not yet supported")
+
+        else:
+            raise ValueError(f"The video source {self.unparsed_source} is not supported")
+
+        # Add format-specific elements
+        if use_jetson:
+            pipeline += "video/x-raw(memory:NVMM) ! nvvidconv ! video/x-raw,format=BGRx ! "
+        else:
+            pipeline += "video/x-raw,format=BGR ! "
+
+        # Add framerate control if specified
+        if self.target_fps is not None:
+            pipeline += f"videorate ! video/x-raw,framerate={self.target_fps}/1 ! "
+
+        # Add format conversion
+        if use_jetson:
+            pipeline += "videoconvert ! video/x-raw,format=BGR"
+        else:
+            pipeline += "videoconvert ! video/x-raw,format=BGR"
+
+        # Add resolution scaling if target shape is specified
+        if all(self.target_shape):
+            pipeline += f",width={self.target_shape[1]},height={self.target_shape[0]}"
+
+        # Final sink
+        pipeline += " ! appsink drop=1"
+
+        return pipeline
 
     @property
     def parsed_source(self):
         """
-        Parse the video source and return the OpenCV VideoCapture object
+        Parse the video source and return the appropriate source string or value based on the backend mode.
 
         Returns:
             The parsed video source with the target shape and the OpenCV backend mode
         """
-        if self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON:
-            if "rtsp" in str(self.unparsed_source):
-                parsed_source = f"uridecodebin uri={self.unparsed_source} ! nvvidconv ! "
-
-            elif ".mp4" in str(self.unparsed_source):
-                parsed_source = f"filesrc location={self.unparsed_source} ! decodebin ! nvvidconv ! "
-
-            elif str(self.unparsed_source).isdigit():
-                logger.warning("The webcam video source is experimental")
-
-                # On linux, the webcam is at /dev/videoX where X is the number of the webcam
-                adapted_source = f"/dev/video{self.unparsed_source}"
-
-                raise NotImplementedError
-
-            elif "/dev/video" in str(self.unparsed_source):
-                if not all(self.target_shape):
-                    raise ValueError("The target shape must be set for the webcam video source")
-
-                if not self.target_fps:
-                    raise ValueError("The target fps must be set for the webcam video source")
-
-                return (
-                    f"v4l2src device={self.unparsed_source} ! "
-                    f"image/jpeg, format=MJPG, width={self.target_shape[1]}, height={self.target_shape[0]}, "
-                    f"framerate={self.target_fps}/1 ! nvv4l2decoder mjpeg=1 ! nvvidconv ! video/x-raw,format=BGRx ! "
-                    f"appsink drop=1"
-                )
-
-            else:
-                logger.error("The video source is not supported")
-                raise ValueError(f"The video source {self.unparsed_source} is not supported")
-
-            parsed_source += "video/x-raw(memory:NVMM) ! nvvidconv ! video/x-raw,format=BGRx ! "
-
-            if self.target_fps is not None:
-                parsed_source += f"videorate ! video/x-raw,framerate={self.target_fps}/1 ! "
-
-            parsed_source += "videoconvert ! video/x-raw, format=BGR"
-
-            if all(self.target_shape):
-                parsed_source += f", width={self.target_shape[1]}, height={self.target_shape[0]}"
-
-            parsed_source += " ! appsink drop=1"
-
-            return parsed_source
+        if self.opencv_backend in [OpencvBackendMode.OPENCV_GSTREAMER, OpencvBackendMode.OPENCV_GSTREAMER_JETSON]:
+            use_jetson = is_jetson_device() and self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON
+            return self._create_gstreamer_pipeline(use_jetson=use_jetson)
 
         elif self.opencv_backend == OpencvBackendMode.OPENCV_DEFAULT:
             if str(self.unparsed_source).isdigit():
                 return int(self.unparsed_source)
-            else:
-                return self.unparsed_source
+            return self.unparsed_source
 
     def __eq__(self, other):
         return (

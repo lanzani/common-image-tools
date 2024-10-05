@@ -1,0 +1,18 @@
+# Example docker compose
+
+services:
+
+  app:
+    image: ghcr.io/lanzani/ultralytics:l4t36.3.0-py3.10.12-pt2.2-tf2.15.0-ocv4.10.0
+    volumes:
+      - ./:/app/common-image-tools
+      - /tmp/:/tmp/  # Required for GUI
+    environment:
+      - DISPLAY=:0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
