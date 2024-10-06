@@ -180,7 +180,7 @@ class VideoSource:
             The parsed video source with the target shape and the OpenCV backend mode
         """
         if self.opencv_backend in [OpencvBackendMode.OPENCV_GSTREAMER, OpencvBackendMode.OPENCV_GSTREAMER_JETSON]:
-            use_jetson = is_jetson_device() and self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON
+            use_jetson = self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON
             return self._create_gstreamer_pipeline(use_jetson=use_jetson)
 
         elif self.opencv_backend == OpencvBackendMode.OPENCV_DEFAULT:
