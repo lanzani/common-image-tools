@@ -13,7 +13,7 @@ def main():
         raw_source,
         target_frame_height=480,
         target_frame_width=640,
-        opencv_backend=OpencvBackendMode.OPENCV_GSTREAMER_JETSON,
+        opencv_backend=OpencvBackendMode.OPENCV_GSTREAMER,
     )
 
     print(source.parsed_source)

@@ -110,7 +110,7 @@ class VideoSource:
             if use_jetson:
                 pipeline = f"uridecodebin uri={self.unparsed_source} ! nvvidconv ! "
             else:
-                pipeline = f"uridecodebin uri={self.unparsed_source} ! " "decodebin ! videoconvert ! videoscale ! "
+                pipeline = f"uridecodebin uri={self.unparsed_source} ! decodebin ! videoconvert ! videoscale ! "
 
         elif ".mp4" in str(self.unparsed_source):
             if use_jetson:
