@@ -86,14 +86,6 @@ class VideoSource:
         else:
             self.opencv_backend = opencv_backend
 
-            # Validate backend selection on non-Jetson devices
-        if self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON and not is_jetson_device():
-            logger.warning(
-                "OPENCV_GSTREAMER_JETSON backend selected but not running on a Jetson device. "
-                "Falling back to standard OPENCV_GSTREAMER"
-            )
-            self.opencv_backend = OpencvBackendMode.OPENCV_GSTREAMER
-
         logger.debug(f"Using {self.opencv_backend} OpenCV backend")
 
     def _create_gstreamer_pipeline(self, use_jetson: bool = False) -> str:
