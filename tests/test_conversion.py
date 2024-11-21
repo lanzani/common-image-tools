@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import pytest
-import numpy as np
-from PIL import Image
+from unittest.mock import Mock, patch
+
 import cv2
 import dlib
-from unittest.mock import Mock, patch
-from common_image_tools.conversion import tuple_to_rect, rect_to_tuple, pil_to_cv2, cv2_to_pil
+import numpy as np
+import pytest
+from PIL import Image
+
+from common_image_tools.conversion import cv2_to_pil, pil_to_cv2, rect_to_tuple, tuple_to_rect
 
 
 class TestTupleToRect:

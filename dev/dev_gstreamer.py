@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 
-from common_image_tools import VideoSource, OpencvBackendMode
-
+from common_image_tools import OpencvBackendMode, VideoSource
 
 # To test this is useful to use the docker-compose in magic-stream.
 

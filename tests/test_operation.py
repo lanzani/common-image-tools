@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from typing import Tuple
+from unittest.mock import patch
 
 import numpy as np
-
-from unittest.mock import patch
 import pytest
 
 from common_image_tools.operation import (
     bbox_centroid,
     is_point_in_bbox,
     is_point_in_shape,
-    scale_bboxes,
     resize_image_with_aspect_ratio,
+    scale_bboxes,
     scaled_bbox_centroid,
 )
 

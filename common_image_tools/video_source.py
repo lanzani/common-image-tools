@@ -4,8 +4,9 @@ from __future__ import annotations
 import os
 from enum import Enum
 
-from common_image_tools.tool import opencv_built_with_gstreamer
 from loguru import logger
+
+from common_image_tools.tool import opencv_built_with_gstreamer
 
 
 def is_jetson_device() -> bool:
