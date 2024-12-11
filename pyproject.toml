@@ -9,7 +9,6 @@ packages = [{ include = "common_image_tools" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 pillow = ">=9.5.0"
-opencv-python = "^4.8.0.0"
 color-transfer = "^0.1"
 scikit-image = "^0.21.0"
 loguru = "^0.7.0"
@@ -26,6 +25,7 @@ genbadge = { extras = ["coverage"], version = "^1.1.1" }
 mypy = "^1.9.0"
 pre-commit = "^3.8.0"
 ruff = "^0.4.0"
+opencv-python = "^4.8.0.0"
 
 [tool.poetry.extras]
 dlib = ["dlib"]
