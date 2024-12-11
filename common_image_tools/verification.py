@@ -34,3 +34,44 @@ def is_inside(point: tuple, shape: list) -> bool:
     result = cv2.pointPolygonTest(ctn, point, measureDist=False)
 
     return result >= 0
+
+
+def calculate_bbox_mask_overlap_cv2(bbox, mask_points, img_height=None, img_width=None):
+    """
+    Calculate the percentage of a bounding box that overlaps with a mask defined by points,
+    using contour area for calculations.
+
+    :param bbox: A tuple of (x1, y1, x2, y2) representing the bounding box
+    :param mask_points: A list of (x, y) tuples representing the mask polygon
+    :param img_height: The height of the image
+    :param img_width: The width of the image
+    :return: The overlap percentage
+    """
+    # Extract bounding box coordinates
+    x1, y1, x2, y2 = bbox
+
+    # Create a blank image for mask and overlap calculation
+    mask = np.zeros((img_height, img_width), dtype=np.uint8)
+    bbox_mask = np.zeros((img_height, img_width), dtype=np.uint8)
+
+    # Draw the mask polygon and bounding box on separate masks
+    mask_points_array = np.array(mask_points, dtype=np.int32)
+    cv2.fillPoly(mask, [mask_points_array], 255)
+    cv2.rectangle(bbox_mask, (x1, y1), (x2, y2), 255, -1)
+
+    # Calculate the overlap
+    overlap = cv2.bitwise_and(mask, bbox_mask)
+
+    # Find contours for mask and overlap
+    mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    overlap_contours, _ = cv2.findContours(overlap, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Calculate areas using contour area
+    mask_area = sum(cv2.contourArea(contour) for contour in mask_contours)
+    overlap_area = sum(cv2.contourArea(contour) for contour in overlap_contours)
+    bbox_area = (x2 - x1) * (y2 - y1)
+
+    # Calculate the percentage
+    overlap_percentage = (overlap_area / bbox_area) * 100
+
+    return overlap_percentage
