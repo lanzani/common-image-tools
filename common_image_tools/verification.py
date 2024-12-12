@@ -36,6 +36,13 @@ def is_inside(point: tuple, shape: list) -> bool:
     return result >= 0
 
 
+def yolobbox_2_bbox(bbox):
+    x, y, w, h = bbox
+    x1, y1 = x - w / 2, y - h / 2
+    x2, y2 = x + w / 2, y + h / 2
+    return x1, y1, x2, y2
+
+
 def calculate_bbox_mask_overlap_cv2(bbox, mask_points, img_height=None, img_width=None):
     """
     Calculate the percentage of a bounding box that overlaps with a mask defined by points,
@@ -48,7 +55,11 @@ def calculate_bbox_mask_overlap_cv2(bbox, mask_points, img_height=None, img_widt
     :return: The overlap percentage
     """
     # Extract bounding box coordinates
-    x1, y1, x2, y2 = bbox
+    x1, y1, x2, y2 = yolobbox_2_bbox(bbox=bbox)
+    x1 = int(x1 * img_width)
+    y1 = int(y1 * img_height)
+    x2 = int(x2 * img_width)
+    y2 = int(y2 * img_height)
 
     # Create a blank image for mask and overlap calculation
     mask = np.zeros((img_height, img_width), dtype=np.uint8)
