@@ -25,11 +25,20 @@ def draw_contour(image: np.ndarray, points, fill: bool):
     return image
 
 
-def draw_point_or_contour(image: np.ndarray, points: list[tuple[float, float]], fill: bool = False) -> np.ndarray:
+def draw_point_or_contour_point(
+        image: np.ndarray, points: list[tuple[float, float]], fill: bool = False, draw_points: bool = False
+) -> np.ndarray:
     points = np.array(points, dtype=np.int32)
     overlay = image.copy()
 
     points = points.reshape((-1, 1, 2))
+
+    # Draw individual points if draw_points is True
+    if draw_points:
+        for point in points:
+            x, y = point[0]
+            cv2.circle(image, (x, y), radius=3, color=(255, 255, 255), thickness=-1)
+
     if len(points) > 3:
         if fill:
             cv2.fillPoly(image, [points], color=(255, 255, 255))
