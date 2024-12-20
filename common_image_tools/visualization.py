@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+
 import cv2
 import numpy as np
 
@@ -26,20 +27,21 @@ def draw_contour(image: np.ndarray, points, fill: bool):
 
 
 def draw_point_or_contour_point(
-        image: np.ndarray, points: list[tuple[float, float]], fill: bool = False, draw_points: bool = False
+    image: np.ndarray, points: list[tuple[float | int, float | int]], fill: bool = False, draw_points: bool = False
 ) -> np.ndarray:
-    points = np.array(points, dtype=np.int32)
-    overlay = image.copy()
+    # Convert float coordinates to integers
+    points = [(int(x), int(y)) for x, y in points]
+    points = np.array(points)
 
-    points = points.reshape((-1, 1, 2))
+    overlay = image.copy()
 
     # Draw individual points if draw_points is True
     if draw_points:
         for point in points:
-            x, y = point[0]
+            x, y = point
             cv2.circle(image, (x, y), radius=3, color=(255, 255, 255), thickness=-1)
 
-    if len(points) > 3:
+    if len(points) >= 3:
         if fill:
             cv2.fillPoly(image, [points], color=(255, 255, 255))
         else:
