@@ -174,3 +174,56 @@ def create_cv2_image(size: Tuple[int, int], color: Tuple[int, int, int]) -> np.n
     img = np.zeros((size[0], size[1], 3), np.uint8)
     img[:] = color
     return img
+
+
+def blur_area(img: np.ndarray, bbox: tuple[int, int, int, int], factor: float = 3.0) -> np.ndarray:
+    # crop image within the bbox
+    image = img[bbox[1] : bbox[3], bbox[0] : bbox[2]]
+
+    # automatically determine the size of the blurring kernel based
+    # on the spatial dimensions of the input image
+    (h, w) = image.shape[:2]
+    k_w = int(w / factor)
+    k_h = int(h / factor)
+    # ensure the width of the kernel is odd
+    if k_w % 2 == 0:
+        k_w -= 1
+    # ensure the height of the kernel is odd
+    if k_h % 2 == 0:
+        k_h -= 1
+    # apply a Gaussian blur to the input image using our computed
+    # kernel size
+    blurred_image = cv2.GaussianBlur(image, (k_w, k_h), 0)
+
+    # Apply the blurred img to the original
+    img[bbox[1] : bbox[3], bbox[0] : bbox[2]] = blurred_image
+
+    return img
+
+
+def blur_area_pixel(img: np.ndarray, bbox: tuple[int, int, int, int], blocks: int = 20) -> np.ndarray:
+    # crop image within the bbox
+    image = img[bbox[1] : bbox[3], bbox[0] : bbox[2]]
+
+    # divide the input image into NxN blocks
+    (h, w) = image.shape[:2]
+    x_steps = np.linspace(0, w, blocks + 1, dtype="int")
+    y_steps = np.linspace(0, h, blocks + 1, dtype="int")
+    # loop over the blocks in both the x and y direction
+    for i in range(1, len(y_steps)):
+        for j in range(1, len(x_steps)):
+            # compute the starting and ending (x, y)-coordinates
+            # for the current block
+            start_x = x_steps[j - 1]
+            start_y = y_steps[i - 1]
+            end_x = x_steps[j]
+            end_y = y_steps[i]
+            # extract the ROI using NumPy array slicing, compute the
+            # mean of the ROI, and then draw a rectangle with the
+            # mean RGB values over the ROI in the original image
+            roi = image[start_y:end_y, start_x:end_x]
+            (B, G, R) = [int(x) for x in cv2.mean(roi)[:3]]
+            cv2.rectangle(image, (start_x, start_y), (end_x, end_y), (B, G, R), -1)
+
+    img[bbox[1] : bbox[3], bbox[0] : bbox[2]] = image
+    return img

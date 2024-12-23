@@ -290,3 +290,5 @@ pyrightconfig.json
 /.python-version
 
 *.png
+
+dev/imgs/*.jpg
