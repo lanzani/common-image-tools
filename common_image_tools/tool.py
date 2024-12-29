@@ -201,29 +201,42 @@ def blur_area(img: np.ndarray, bbox: tuple[int, int, int, int], factor: float = 
     return img
 
 
-def blur_area_pixel(img: np.ndarray, bbox: tuple[int, int, int, int], blocks: int = 20) -> np.ndarray:
-    # crop image within the bbox
-    image = img[bbox[1] : bbox[3], bbox[0] : bbox[2]]
+def blur_area_pixel(img: np.ndarray, bbox: tuple[int, int, int, int], blocks: int = 20, padding: int = 0) -> np.ndarray:
+    (original_h, original_w) = img.shape[:2]
 
-    # divide the input image into NxN blocks
+    # Extract (x, y, w, h) from bbox
+    x, y, w, h = bbox
+
+    # Calculate the padded bounding box
+    padded_bbox = (
+        max(0, x - padding),  # x1
+        max(0, y - padding),  # y1
+        min(original_w, x + w + padding),  # x2
+        min(original_h, y + h + padding),  # y2
+    )
+
+    # Crop image within the padded bounding box
+    image = img[padded_bbox[1] : padded_bbox[3], padded_bbox[0] : padded_bbox[2]]
+
+    # Divide the input image into NxN blocks
     (h, w) = image.shape[:2]
     x_steps = np.linspace(0, w, blocks + 1, dtype="int")
     y_steps = np.linspace(0, h, blocks + 1, dtype="int")
-    # loop over the blocks in both the x and y direction
+
+    # Loop over the blocks in both the x and y direction
     for i in range(1, len(y_steps)):
         for j in range(1, len(x_steps)):
-            # compute the starting and ending (x, y)-coordinates
-            # for the current block
+            # Compute the starting and ending (x, y)-coordinates for the current block
             start_x = x_steps[j - 1]
             start_y = y_steps[i - 1]
             end_x = x_steps[j]
             end_y = y_steps[i]
-            # extract the ROI using NumPy array slicing, compute the
-            # mean of the ROI, and then draw a rectangle with the
-            # mean RGB values over the ROI in the original image
+            # Extract the ROI using NumPy array slicing, compute the mean of the ROI
             roi = image[start_y:end_y, start_x:end_x]
             (B, G, R) = [int(x) for x in cv2.mean(roi)[:3]]
+            # Draw a rectangle with the mean RGB values over the ROI in the original image
             cv2.rectangle(image, (start_x, start_y), (end_x, end_y), (B, G, R), -1)
 
-    img[bbox[1] : bbox[3], bbox[0] : bbox[2]] = image
+    # Place the blurred area back into the original image
+    img[padded_bbox[1] : padded_bbox[3], padded_bbox[0] : padded_bbox[2]] = image
     return img

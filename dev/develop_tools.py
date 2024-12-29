@@ -38,7 +38,8 @@ def dev_blur_area():
 
     img = resize_image_with_aspect_ratio(img, (600, 600))
 
-    img = blur_area_pixel(img, (10, 10, 300, 300))
+    # bbox: x, y, w, h
+    img = blur_area_pixel(img, (500, 200, 100, 300), padding=40)
     cv2.imshow("img", img)
     cv2.waitKey(0)
 
