@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
 import pytest
 from PIL.Image import Image
 
 from common_image_tools.tool import (
     create_cv2_image,
-    opencv_built_with_gstreamer,
-    movement_detection,
-    merge_color,
     create_pil_image,
+    merge_color,
+    movement_detection,
+    opencv_built_with_gstreamer,
 )
 
 

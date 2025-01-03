@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+
 from common_image_tools.verification import is_inside
 
 

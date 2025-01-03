@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import pytest
-import numpy as np
 import cv2
+import numpy as np
+import pytest
 from PIL import Image
 
-from common_image_tools.visualization import draw_points_shape, draw_contour
+from common_image_tools.visualization import draw_contour, draw_points_shape
 
 
 def test_draw_points_shape():
