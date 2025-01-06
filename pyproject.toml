@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "common-image-tools"
-version = "0.5.1"
+version = "0.5.2"
 description = ""
 authors = ["Federico Lanzani <federico@federicolanzani.com>"]
 readme = "README.md"
