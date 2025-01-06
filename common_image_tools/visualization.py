@@ -27,7 +27,11 @@ def draw_contour(image: np.ndarray, points, fill: bool):
 
 
 def draw_point_or_contour_point(
-    image: np.ndarray, points: list[tuple[float | int, float | int]], fill: bool = False, draw_points: bool = False
+    image: np.ndarray,
+    points: list[tuple[float | int, float | int]],
+    fill: bool = False,
+    draw_points: bool = False,
+    color: tuple[int, int, int] = (255, 255, 255),
 ) -> np.ndarray:
     # Convert float coordinates to integers
     points = [(int(x), int(y)) for x, y in points]
@@ -39,20 +43,20 @@ def draw_point_or_contour_point(
     if draw_points:
         for point in points:
             x, y = point
-            cv2.circle(image, (x, y), radius=3, color=(255, 255, 255), thickness=-1)
+            cv2.circle(image, (x, y), radius=3, color=color, thickness=-1)
 
     if len(points) >= 3:
         if fill:
-            cv2.fillPoly(image, [points], color=(255, 255, 255))
+            cv2.fillPoly(image, [points], color=color)
         else:
             # Create fully opaque fill
-            cv2.fillPoly(overlay, [points], color=(255, 255, 255))  # White fill
+            cv2.fillPoly(overlay, [points], color=color)  # White fill
             # Blend the overlay with original image for semi-transparent fill
             image = cv2.addWeighted(overlay, 0.3, image, 0.7, 0)
             # Add solid white contour on top
-            cv2.polylines(image, [points], isClosed=True, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA)
+            cv2.polylines(image, [points], isClosed=True, color=color, thickness=2, lineType=cv2.LINE_AA)
     else:
         # For lines with less than 4 points - solid line
-        cv2.polylines(image, [points], isClosed=False, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA)
+        cv2.polylines(image, [points], isClosed=False, color=color, thickness=2, lineType=cv2.LINE_AA)
 
     return image
