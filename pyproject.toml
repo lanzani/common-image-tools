@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "common-image-tools"
 version = "0.5.2"
-description = ""
-authors = ["Federico Lanzani <federico@federicolanzani.com>"]
+description = "Don't reinvent the wheel every time! This library offers a curated collection of commonly used image manipulation functions for computer vision projects."
+authors = ["Federico Lanzani <hello@federicolanzani.com>"]
 readme = "README.md"
 packages = [{ include = "common_image_tools" }]
 
