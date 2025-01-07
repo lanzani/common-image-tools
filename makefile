@@ -13,7 +13,7 @@ release: test badge
 	$(eval VERSION := $(shell poetry version -s))
 	@echo Building version: $(VERSION)
 	@poetry build
-	@git add pyproject.toml
+	@git add pyproject.toml poetry.lock
 	@git commit -m "Release version $(VERSION)"
 	@git tag $(VERSION)
 	@git push origin main --tags
