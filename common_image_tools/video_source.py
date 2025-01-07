@@ -58,17 +58,17 @@ class VideoSource:
         """
         The VideoSource class is used to parse the video source and set the target shape of the video frames.
 
-        The parsed source is used to create the OpenCV VideoCapture object and can be accessed with the parsed_source
-        property.
-
         Args:
             source: The video source, it can be a rtsp link, a video file or a webcam number
             target_frame_height: The target height of the video frames
             target_frame_width: The target width of the video frames
             opencv_backend: The OpenCV backend mode to use, by default it is set to AUTO
-        """
 
+        Raises:
+            ValueError: If the source format is not supported
+        """
         self.unparsed_source = source
+        self._validate_source(source)  # Add source validation during initialization
         self.target_shape: tuple[int, int] | None = (target_frame_height, target_frame_width)
         self.target_fps = target_fps
 
@@ -88,6 +88,23 @@ class VideoSource:
             self.opencv_backend = opencv_backend
 
         logger.debug(f"Using {self.opencv_backend} OpenCV backend")
+
+    def _validate_source(self, source) -> None:
+        """
+        Validate if the source format is supported.
+
+        Args:
+            source: The video source to validate
+
+        Raises:
+            ValueError: If the source format is not supported
+        """
+        source_str = str(source)
+        valid_source = (
+            "rtsp" in source_str or ".mp4" in source_str or "/dev/video" in source_str or source_str.isdigit()
+        )
+        if not valid_source:
+            raise ValueError(f"The video source {source} is not supported")
 
     def _create_gstreamer_pipeline(self, use_jetson: bool = False) -> str:
         """

@@ -292,3 +292,4 @@ pyrightconfig.json
 *.png
 
 dev/imgs/*.jpg
+.vscode
