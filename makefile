@@ -12,7 +12,7 @@ release: test badge
 	$(eval VERSION := $(shell poetry version -s))
 	@echo Building version: $(VERSION)
 	@poetry build
-	@git add pyproject.toml coverage-badge.svg
+	@git add .
 	@git commit -m "Release version $(VERSION)"
 	@git tag $(VERSION)
 	@git push origin main --tags
