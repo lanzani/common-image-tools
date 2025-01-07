@@ -6,13 +6,14 @@ test:
 badge:
 	@coverage xml
 	@genbadge coverage -i coverage.xml -o reports/coverage/coverage-badge.svg
+	@git add reports/coverage/coverage-badge.svg
 
 release: test badge
 	@poetry version $(BUMP)
 	$(eval VERSION := $(shell poetry version -s))
 	@echo Building version: $(VERSION)
 	@poetry build
-	@git add .
+	@git add pyproject.toml
 	@git commit -m "Release version $(VERSION)"
 	@git tag $(VERSION)
 	@git push origin main --tags
