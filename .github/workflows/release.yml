@@ -11,7 +11,7 @@ on:
 env:
   PACKAGE_NAME: "common-image-tools"
   OWNER: "lanzani"
-  TAP_NAME: "<common-image-tools>"
+  TAP_NAME: "common-image-tools"
 
 jobs:
   details:
