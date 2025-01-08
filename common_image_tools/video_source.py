@@ -184,10 +184,10 @@ class VideoSource:
     @property
     def parsed_source(self):
         """
-        Parse the video source and return the appropriate source string or value based on the backend mode.
+        Parse the video source and return the appropriate source string or value based on the backend mode and parameters.
 
         Returns:
-            The parsed video source with the target shape and the OpenCV backend mode
+            The parsed video source according to the configured backend mode and parameters.
         """
         if self.opencv_backend in [OpencvBackendMode.OPENCV_GSTREAMER, OpencvBackendMode.OPENCV_GSTREAMER_JETSON]:
             use_jetson = self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON

@@ -16,7 +16,7 @@ such as resizing, cropping, filtering, and more.
 - **Filtering**: Apply various filters to enhance or modify images.
 - **Conversion**: Convert images between different formats.
 - **Visualization**: Tools for visualizing image data.
-- ...
+- **Video Source**: Flexible interface for handling different types of video inputs.
 
 ## Installation
 
@@ -32,19 +32,108 @@ or using poetry:
 poetry add common-image-tools
 ```
 
-# Usage
-Install it and run it!
-## Conversion
+## Usage
 
-## Operation
+### Video Source
 
-## Tool
+The `VideoSource` class provides a flexible interface for handling different types of video inputs with support for various OpenCV backends and hardware acceleration on Jetson devices.
 
-## Verification
+#### Features
+- Support for multiple video source types:
+  - RTSP streams
+  - Video files (MP4)
+  - Webcam devices
+- Configurable frame dimensions and FPS
+- Multiple backend options:
+  - OpenCV default
+  - GStreamer
+  - GStreamer with Jetson hardware acceleration
+- Automatic backend selection based on system capabilities
 
-## Visualization
+#### Basic Usage
 
-## Video Source
+```python
+from common_image_tools import VideoSource
+import cv2
+
+# Create a video source
+source = VideoSource(
+    "video.mp4",
+    target_frame_height=720,
+    target_frame_width=1280,
+    target_fps=30
+)
+
+# Use with OpenCV
+cap = cv2.VideoCapture(source.parsed_source)
+```
+
+#### Different Source Types
+
+```python
+# RTSP Stream
+rtsp_source = VideoSource("rtsp://example.com/stream")
+
+# Video File
+file_source = VideoSource("path/to/video.mp4")
+
+# Webcam
+webcam_source = VideoSource("/dev/video0")
+
+# Webcam
+webcam_source = VideoSource(0)
+```
+
+#### Backend Selection
+
+```python
+from common_image_tools import VideoSource, OpencvBackendMode
+
+# Auto backend selection (default)
+source = VideoSource("video.mp4")
+
+# Force OpenCV default backend
+source = VideoSource(
+    "video.mp4",
+    opencv_backend=OpencvBackendMode.OPENCV_DEFAULT
+)
+
+# Force GStreamer backend
+source = VideoSource(
+    "video.mp4",
+    opencv_backend=OpencvBackendMode.OPENCV_GSTREAMER
+)
+
+# Use Jetson-optimized GStreamer backend
+source = VideoSource(
+    "video.mp4",
+    opencv_backend=OpencvBackendMode.OPENCV_GSTREAMER_JETSON
+)
+```
+
+#### API Reference
+
+##### VideoSource
+
+```python
+VideoSource(
+    source,
+    target_frame_height: int = None,
+    target_frame_width: int = None,
+    target_fps: int = None,
+    opencv_backend: OpencvBackendMode = OpencvBackendMode.AUTO
+)
+```
+
+### Conversion
+
+### Operation
+
+### Tool
+
+### Verification
+
+### Visualization
 
 ## Contributing
 
