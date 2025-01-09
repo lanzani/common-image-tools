@@ -8,6 +8,9 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+b[0-9]+"
       - "[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
 
+    branches:
+      - main
+
 env:
   PACKAGE_NAME: "common-image-tools"
   OWNER: "lanzani"
@@ -26,13 +29,6 @@ jobs:
       - name: Extract tag and Details
         id: release
         run: |
-          # Check if the branch is 'main'
-          BRANCH_NAME=${GITHUB_REF_NAME}
-          if [ "$BRANCH_NAME" != "main" ]; then
-            echo "Error: Tag is not pushed on the 'main' branch. Current branch is '$BRANCH_NAME'."
-            exit 1
-          fi
-
           if [ "${{ github.ref_type }}" = "tag" ]; then
             TAG_NAME=${GITHUB_REF#refs/tags/}
             NEW_VERSION=$(echo $TAG_NAME | awk -F'-' '{print $1}')
@@ -75,7 +71,7 @@ jobs:
           fi
 
   setup_and_build:
-    needs: [details, check_pypi]
+    needs: [ details, check_pypi ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -109,7 +105,7 @@ jobs:
 
   pypi_publish:
     name: Upload release to PyPI
-    needs: [setup_and_build, details]
+    needs: [ setup_and_build, details ]
     runs-on: ubuntu-latest
     environment:
       name: release
@@ -127,7 +123,7 @@ jobs:
 
   github_release:
     name: Create GitHub Release
-    needs: [setup_and_build, details]
+    needs: [ setup_and_build, details ]
     runs-on: ubuntu-latest
     permissions:
       contents: write
