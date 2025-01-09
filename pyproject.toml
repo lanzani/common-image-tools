@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "common-image-tools"
-version = "0.5.11"
+version = "0.5.12"
 description = "Don't reinvent the wheel every time! This library offers a curated collection of commonly used image manipulation functions for computer vision projects."
 authors = ["Federico Lanzani <hello@federicolanzani.com>"]
 readme = "README.md"
