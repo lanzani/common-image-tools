@@ -1,7 +1,7 @@
 # Common Image Tools
 
-![Latest Stable Version](https://badgen.net/github/release/lanzani/common-image-tools/stable?dummy=8484744)
-![PyPI - Downloads](https://badgen.net/pypi/dm/common-image-tools)
+![GitHub Release](https://img.shields.io/github/v/release/lanzani/common-image-tools?color=blue)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/common-image-tools)
 
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
