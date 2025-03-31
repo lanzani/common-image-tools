@@ -54,9 +54,13 @@ def draw_point_or_contour_point(
             # Blend the overlay with original image for semi-transparent fill
             image = cv2.addWeighted(overlay, 0.3, image, 0.7, 0)
             # Add solid white contour on top
-            cv2.polylines(image, [points], isClosed=True, color=color, thickness=2, lineType=cv2.LINE_AA)
+            cv2.polylines(
+                image, [points], isClosed=True, color=color, thickness=2, lineType=cv2.LINE_AA
+            )
     else:
         # For lines with less than 4 points - solid line
-        cv2.polylines(image, [points], isClosed=False, color=color, thickness=2, lineType=cv2.LINE_AA)
+        cv2.polylines(
+            image, [points], isClosed=False, color=color, thickness=2, lineType=cv2.LINE_AA
+        )
 
     return image

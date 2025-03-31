@@ -64,7 +64,12 @@ def scale_bboxes(bboxes: list[tuple], scale_factor: float) -> list[tuple]:
     for box in bboxes:
         x, y, w, h = box
         f_bboxes.append(
-            (ceil(x * scale_factor), ceil(y * scale_factor), ceil(w * scale_factor), ceil(h * scale_factor))
+            (
+                ceil(x * scale_factor),
+                ceil(y * scale_factor),
+                ceil(w * scale_factor),
+                ceil(h * scale_factor),
+            )
         )
 
     return f_bboxes
@@ -85,7 +90,9 @@ def bbox_centroid(bbox: tuple[int, int, int, int]) -> tuple[int, int]:
     return int(center_x), int(center_y)
 
 
-def scaled_bbox_centroid(image: np.ndarray, bbox: tuple[float, float, float, float]) -> tuple[int, int]:
+def scaled_bbox_centroid(
+    image: np.ndarray, bbox: tuple[float, float, float, float]
+) -> tuple[int, int]:
     """Calculate the centroid coordinates of a bounding box and scale them to the image size.
 
     Parameters:

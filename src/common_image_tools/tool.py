@@ -202,7 +202,9 @@ def blur_area(img: np.ndarray, bbox: tuple[int, int, int, int], factor: float = 
     return img
 
 
-def blur_area_pixel(img: np.ndarray, bbox: tuple[int, int, int, int], blocks: int = 20, padding: int = 0) -> np.ndarray:
+def blur_area_pixel(
+    img: np.ndarray, bbox: tuple[int, int, int, int], blocks: int = 20, padding: int = 0
+) -> np.ndarray:
     (original_h, original_w) = img.shape[:2]
 
     # Extract (x, y, w, h) from bbox

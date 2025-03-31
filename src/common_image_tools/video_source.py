@@ -101,7 +101,10 @@ class VideoSource:
         """
         source_str = str(source)
         valid_source = (
-            "rtsp" in source_str or ".mp4" in source_str or "/dev/video" in source_str or source_str.isdigit()
+            "rtsp" in source_str
+            or ".mp4" in source_str
+            or "/dev/video" in source_str
+            or source_str.isdigit()
         )
         if not valid_source:
             raise ValueError(f"The video source {source} is not supported")
@@ -126,7 +129,10 @@ class VideoSource:
             if use_jetson:
                 pipeline = f"filesrc location={self.unparsed_source} ! decodebin ! nvvidconv ! "
             else:
-                pipeline = f"filesrc location={self.unparsed_source} ! " "decodebin ! videoconvert ! videoscale ! "
+                pipeline = (
+                    f"filesrc location={self.unparsed_source} ! "
+                    "decodebin ! videoconvert ! videoscale ! "
+                )
 
         elif "/dev/video" in str(self.unparsed_source):
             if not all(self.target_shape):
@@ -151,7 +157,9 @@ class VideoSource:
 
         elif str(self.unparsed_source).isdigit():
             logger.warning("The webcam video source is experimental")
-            raise NotImplementedError(f"Integer video source {self.unparsed_source} not yet supported")
+            raise NotImplementedError(
+                f"Integer video source {self.unparsed_source} not yet supported"
+            )
 
         else:
             raise ValueError(f"The video source {self.unparsed_source} is not supported")
@@ -189,7 +197,10 @@ class VideoSource:
         Returns:
             The parsed video source according to the configured backend mode and parameters.
         """
-        if self.opencv_backend in [OpencvBackendMode.OPENCV_GSTREAMER, OpencvBackendMode.OPENCV_GSTREAMER_JETSON]:
+        if self.opencv_backend in [
+            OpencvBackendMode.OPENCV_GSTREAMER,
+            OpencvBackendMode.OPENCV_GSTREAMER_JETSON,
+        ]:
             use_jetson = self.opencv_backend == OpencvBackendMode.OPENCV_GSTREAMER_JETSON
             return self._create_gstreamer_pipeline(use_jetson=use_jetson)
 

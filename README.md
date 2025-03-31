@@ -1,12 +1,11 @@
 # Common Image Tools
 
-![GitHub Release](https://img.shields.io/github/v/release/lanzani/common-image-tools?color=blue)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/common-image-tools)
-
-[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
+[![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-border.json)](https://github.com/copier-org/copier)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Coverage Status](/reports/coverage/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)
 
+[![GitHub Release](/reports/version-badge.svg?dummy=8484754)]()
+[![Coverage Status](/reports/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)
 
 ## Description
 
@@ -22,7 +21,6 @@ such as resizing, cropping, filtering, and more.
 - **Conversion**: Convert images between different formats.
 - **Visualization**: Tools for visualizing image data.
 - **Video Source**: Flexible interface for handling different types of video inputs.
-
 ## Installation
 
 To install common_image_tools, run the following command:
@@ -31,14 +29,13 @@ To install common_image_tools, run the following command:
 pip install common-image-tools
 ```
 
-or using poetry:
+or using [uv](https://docs.astral.sh/uv/):
 
 ```bash
-poetry add common-image-tools
+uv add common-image-tools
 ```
 
 ## Usage
-
 ### Video Source
 
 The `VideoSource` class provides a flexible interface for handling different types of video inputs with support for various OpenCV backends and hardware acceleration on Jetson devices.
