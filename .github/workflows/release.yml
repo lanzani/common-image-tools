@@ -9,6 +9,11 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+b[0-9]+"
       - "[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
 
+env:
+  PACKAGE_NAME: "common-image-tools"
+  OWNER: "lanzani"
+  TAP_NAME: "common-image-tools"
+
 jobs:
   details:
     runs-on: ubuntu-latest
