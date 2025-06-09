@@ -10,9 +10,149 @@ from common_image_tools.operation import (
     is_point_in_bbox,
     is_point_in_shape,
     resize_image_with_aspect_ratio,
+    scale_bbox_xywh_to_frame_size,
     scale_bboxes,
     scaled_bbox_centroid,
 )
+
+
+class TestScaleBboxXywhToFrame:
+    """Test suite for scale_bbox_xywh_to_frame function."""
+
+    def test_basic_scaling_up(self):
+        """Test basic upscaling functionality."""
+        bbox = [10, 20, 50, 80]
+        source_size = (320, 240)
+        dest_size = (640, 480)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [20.0, 40.0, 100.0, 160.0]
+
+        assert result == expected
+
+    def test_basic_scaling_down(self):
+        """Test basic downscaling functionality."""
+        bbox = [100, 200, 300, 400]
+        source_size = (1920, 1080)
+        dest_size = (640, 360)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [100 / 3, 200 / 3, 100.0, 400 / 3]
+
+        # Use pytest.approx for floating point comparison
+        assert result == pytest.approx(expected)
+
+    def test_no_scaling_same_size(self):
+        """Test that no scaling occurs when source and dest sizes are the same."""
+        bbox = [10, 20, 50, 80]
+        source_size = (640, 480)
+        dest_size = (640, 480)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [10.0, 20.0, 50.0, 80.0]
+
+        assert result == expected
+
+    def test_different_aspect_ratios(self):
+        """Test scaling between frames with different aspect ratios."""
+        bbox = [0, 0, 100, 100]  # Square bbox
+        source_size = (100, 100)  # Square frame
+        dest_size = (200, 400)  # Rectangular frame (1:2 ratio)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [0.0, 0.0, 200.0, 400.0]
+
+        assert result == expected
+
+    def test_floating_point_inputs(self):
+        """Test with floating point inputs."""
+        bbox = [10.5, 20.7, 50.3, 80.9]
+        source_size = (320.0, 240.0)
+        dest_size = (640.0, 480.0)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [21.0, 41.4, 100.6, 161.8]
+
+        assert result == pytest.approx(expected)
+
+    def test_zero_coordinates(self):
+        """Test with zero coordinates."""
+        bbox = [0, 0, 100, 100]
+        source_size = (200, 200)
+        dest_size = (400, 400)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [0.0, 0.0, 200.0, 200.0]
+
+        assert result == expected
+
+    def test_fractional_scaling(self):
+        """Test with fractional scaling factors."""
+        bbox = [10, 10, 20, 20]
+        source_size = (100, 100)
+        dest_size = (33, 33)  # 1/3 scaling
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [3.3, 3.3, 6.6, 6.6]
+
+        assert result == pytest.approx(expected)
+
+    def test_invalid_bbox_length(self):
+        """Test error handling for invalid bbox length."""
+        with pytest.raises(ValueError, match="bbox must have exactly 4 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30], (100, 100), (200, 200))
+
+        with pytest.raises(ValueError, match="bbox must have exactly 4 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40, 50], (100, 100), (200, 200))
+
+    def test_invalid_source_size_length(self):
+        """Test error handling for invalid source_size length."""
+        with pytest.raises(ValueError, match="source_size must have exactly 2 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (100,), (200, 200))
+
+        with pytest.raises(ValueError, match="source_size must have exactly 2 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (100, 100, 100), (200, 200))
+
+    def test_invalid_dest_size_length(self):
+        """Test error handling for invalid dest_size length."""
+        with pytest.raises(ValueError, match="dest_size must have exactly 2 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (100, 100), (200,))
+
+        with pytest.raises(ValueError, match="dest_size must have exactly 2 elements"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (100, 100), (200, 200, 200))
+
+    def test_zero_source_width(self):
+        """Test error handling for zero source width."""
+        with pytest.raises(ZeroDivisionError, match="Source width cannot be zero"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (0, 100), (200, 200))
+
+    def test_zero_source_height(self):
+        """Test error handling for zero source height."""
+        with pytest.raises(ZeroDivisionError, match="Source height cannot be zero"):
+            scale_bbox_xywh_to_frame_size([10, 20, 30, 40], (100, 0), (200, 200))
+
+    def test_negative_inputs(self):
+        """Test with negative coordinate inputs (should work)."""
+        bbox = [-10, -20, 50, 80]
+        source_size = (320, 240)
+        dest_size = (640, 480)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+        expected = [-20.0, -40.0, 100.0, 160.0]
+
+        assert result == expected
+
+    def test_integer_inputs(self):
+        """Test that function works with integer inputs."""
+        bbox = [10, 20, 50, 80]
+        source_size = (320, 240)
+        dest_size = (640, 480)
+
+        result = scale_bbox_xywh_to_frame_size(bbox, source_size, dest_size)
+
+        # Should return floats even with integer inputs
+        assert all(isinstance(coord, float) for coord in result)
+        assert result == [20.0, 40.0, 100.0, 160.0]
 
 
 class TestBboxCentroid:

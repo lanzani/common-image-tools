@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from math import ceil
+from typing import Union
 
 import cv2
 import numpy as np
@@ -112,3 +113,81 @@ def scaled_bbox_centroid(
     center_x = x_scaled + (w_scaled / 2)
     center_y = y_scaled + (h_scaled / 2)
     return int(center_x), int(center_y)
+
+
+def scale_bbox_xywh_to_frame_size(
+    bbox: list[Union[int, float]],
+    source_size: tuple[Union[int, float], Union[int, float]],
+    dest_size: tuple[Union[int, float], Union[int, float]],
+) -> list[float]:
+    """
+    Scale a bounding box from source frame coordinates to destination frame coordinates.
+
+    This function takes a bounding box defined in [x, y, width, height] format and scales
+    it proportionally from a source frame size to a destination frame size. The scaling
+    is applied independently to x/width (horizontal) and y/height (vertical) dimensions.
+
+    Args:
+        bbox: Bounding box in [x, y, width, height] format where:
+            - x: Left coordinate of the bounding box
+            - y: Top coordinate of the bounding box
+            - width: Width of the bounding box
+            - height: Height of the bounding box
+        source_size: Tuple of (width, height) representing the source frame dimensions
+        dest_size: Tuple of (width, height) representing the destination frame dimensions
+
+    Returns:
+        List[float]: Scaled bounding box in [x, y, width, height] format with coordinates
+                    adjusted for the destination frame size
+
+    Raises:
+        ValueError: If bbox doesn't have exactly 4 elements
+        ValueError: If source_size or dest_size don't have exactly 2 elements
+        ZeroDivisionError: If source frame dimensions are zero
+
+    Examples:
+        >>> # Scale bbox from 320x240 to 640x480 (2x scaling)
+        >>> bbox = [10, 20, 50, 80]
+        >>> source = (320, 240)
+        >>> dest = (640, 480)
+        >>> scale_bbox_xywh_to_frame_size(bbox, source, dest)
+        [20.0, 40.0, 100.0, 160.0]
+
+        >>> # Scale bbox from 1920x1080 to 640x360 (downscaling)
+        >>> bbox = [100, 200, 300, 400]
+        >>> source = (1920, 1080)
+        >>> dest = (640, 360)
+        >>> scale_bbox_xywh_to_frame_size(bbox, source, dest)
+        [33.333333333333336, 66.66666666666667, 100.0, 133.33333333333334]
+    """
+    # Input validation
+    if len(bbox) != 4:
+        raise ValueError(f"bbox must have exactly 4 elements, got {len(bbox)}")
+
+    if len(source_size) != 2:
+        raise ValueError(f"source_size must have exactly 2 elements, got {len(source_size)}")
+
+    if len(dest_size) != 2:
+        raise ValueError(f"dest_size must have exactly 2 elements, got {len(dest_size)}")
+
+    x, y, w, h = bbox
+    src_w, src_h = source_size
+    dest_w, dest_h = dest_size
+
+    # Check for zero division
+    if src_w == 0:
+        raise ZeroDivisionError("Source width cannot be zero")
+    if src_h == 0:
+        raise ZeroDivisionError("Source height cannot be zero")
+
+    # Calculate scaling factors
+    scale_x = dest_w / src_w
+    scale_y = dest_h / src_h
+
+    # Apply scaling
+    new_x = x * scale_x
+    new_y = y * scale_y
+    new_w = w * scale_x
+    new_h = h * scale_y
+
+    return [new_x, new_y, new_w, new_h]
