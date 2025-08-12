@@ -39,7 +39,7 @@ wheels = [
 
 [[package]]
 name = "common-image-tools"
-version = "0.5.25"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "color-transfer" },
