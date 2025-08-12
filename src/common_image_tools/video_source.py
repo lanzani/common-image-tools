@@ -101,10 +101,7 @@ class VideoSource:
         """
         source_str = str(source)
         valid_source = (
-            "rtsp" in source_str
-            or ".mp4" in source_str
-            or "/dev/video" in source_str
-            or source_str.isdigit()
+            "rtsp" in source_str or ".mp4" in source_str or "/dev/video" in source_str or source_str.isdigit()
         )
         if not valid_source:
             raise ValueError(f"The video source {source} is not supported")
@@ -123,16 +120,13 @@ class VideoSource:
             if use_jetson:
                 pipeline = f"uridecodebin uri={self.unparsed_source} ! nvvidconv ! "
             else:
-                pipeline = f"uridecodebin uri={self.unparsed_source} ! decodebin ! videoconvert ! videoscale ! "
+                pipeline = f"uridecodebin uri={self.unparsed_source} ! videoconvert ! videoscale ! "
 
         elif ".mp4" in str(self.unparsed_source):
             if use_jetson:
                 pipeline = f"filesrc location={self.unparsed_source} ! decodebin ! nvvidconv ! "
             else:
-                pipeline = (
-                    f"filesrc location={self.unparsed_source} ! "
-                    "decodebin ! videoconvert ! videoscale ! "
-                )
+                pipeline = f"filesrc location={self.unparsed_source} ! decodebin ! videoconvert ! videoscale ! "
 
         elif "/dev/video" in str(self.unparsed_source):
             if not all(self.target_shape):
@@ -157,9 +151,7 @@ class VideoSource:
 
         elif str(self.unparsed_source).isdigit():
             logger.warning("The webcam video source is experimental")
-            raise NotImplementedError(
-                f"Integer video source {self.unparsed_source} not yet supported"
-            )
+            raise NotImplementedError(f"Integer video source {self.unparsed_source} not yet supported")
 
         else:
             raise ValueError(f"The video source {self.unparsed_source} is not supported")
