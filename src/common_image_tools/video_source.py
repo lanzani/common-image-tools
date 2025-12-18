@@ -101,7 +101,10 @@ class VideoSource:
         """
         source_str = str(source)
         valid_source = (
-            "rtsp" in source_str or ".mp4" in source_str or "/dev/video" in source_str or source_str.isdigit()
+            "rtsp" in source_str
+            or ".mp4" in source_str
+            or "/dev/video" in source_str
+            or source_str.isdigit()
         )
         if not valid_source:
             raise ValueError(f"The video source {source} is not supported")
@@ -120,7 +123,7 @@ class VideoSource:
             if use_jetson:
                 pipeline = f"uridecodebin uri={self.unparsed_source} ! nvvidconv ! "
             else:
-                pipeline = f"uridecodebin uri={self.unparsed_source} ! videoconvert ! videoscale ! "
+                pipeline = f"uridecodebin uri={self.unparsed_source} ! "
 
         elif ".mp4" in str(self.unparsed_source):
             if use_jetson:
@@ -151,7 +154,9 @@ class VideoSource:
 
         elif str(self.unparsed_source).isdigit():
             logger.warning("The webcam video source is experimental")
-            raise NotImplementedError(f"Integer video source {self.unparsed_source} not yet supported")
+            raise NotImplementedError(
+                f"Integer video source {self.unparsed_source} not yet supported"
+            )
 
         else:
             raise ValueError(f"The video source {self.unparsed_source} is not supported")
@@ -159,22 +164,20 @@ class VideoSource:
         # Add format-specific elements
         if use_jetson:
             pipeline += "video/x-raw(memory:NVMM) ! nvvidconv ! video/x-raw,format=BGRx ! "
-        else:
-            pipeline += "video/x-raw,format=BGR ! "
 
         # Add framerate control if specified
         if self.target_fps is not None:
             pipeline += f"videorate ! video/x-raw,framerate={self.target_fps}/1 ! "
+
+        # Add resolution scaling if target shape is specified
+        if all(self.target_shape):
+            pipeline += f"videoscale ! video/x-raw,width={self.target_shape[1]},height={self.target_shape[0]} ! "
 
         # Add format conversion
         if use_jetson:
             pipeline += "videoconvert ! video/x-raw,format=BGR"
         else:
             pipeline += "videoconvert ! video/x-raw,format=BGR"
-
-        # Add resolution scaling if target shape is specified
-        if all(self.target_shape):
-            pipeline += f",width={self.target_shape[1]},height={self.target_shape[0]}"
 
         # Final sink
         pipeline += " ! appsink drop=1"
